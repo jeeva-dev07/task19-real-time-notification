@@ -1,0 +1,170 @@
+1. What is the difference between HTTP and WebSocket communication? Draw the flow of each in text/arrows.
+
+HTTP (HyperText Transfer Protocol) is a request-response protocol. The client sends a request to the server, the server processes it, sends a response, and then the connection closes. If the client needs new data, it must send another request.
+
+HTTP Flow:
+
+Client
+   │
+   │ HTTP Request
+   ▼
+Server
+   │
+   │ Process Request
+   ▼
+HTTP Response
+   │
+   ▼
+Client
+
+(New request is needed for more data)
+
+Characteristics:
+• Request-response communication
+• Stateless protocol
+• Connection closes after every request
+• Used for REST APIs
+
+In my project, HTTP is used for:
+• Login
+• Register
+• Get Products
+• Place Orders
+• Load Notifications
+WebSocket Communication
+WebSocket creates a persistent connection between the client and server.
+Once connected, both the client and server can send data to each other at any time without opening a new connection.
+WebSocket Flow:
+Client
+   │
+   │ WebSocket Handshake
+   ▼
+Server
+   │
+   │ Connection Established
+   ▼
+═══════════════════════════════════════
+Client  ◄──────────────►  Server
+      Real-Time Communication
+═══════════════════════════════════════
+
+Server ─────► Client (New Notification)
+Client ─────► Server (Socket Events)
+
+Characteristics:
+• Persistent connection
+• Two-way communication
+• Low latency
+• Best for real-time updates
+
+In my project, WebSocket is used to send new order notifications instantly to admin users without refreshing the page.
+
+============================================================
+2. What is a Socket.IO room and why did you use one for admin users instead of broadcasting to everyone?
+
+A Socket.IO room is a logical group of connected clients. Only the users who join that room receive the events sent to it.
+
+In my project, when an admin logs in, the server adds the admin's socket to the "admins" room.
+
+When a customer places an order, the server sends the notification only to the "admins" room.
+
+Flow:
+
+Customer Places Order
+          │
+          ▼
+Flask Server
+          │
+          ▼
+Create Notification
+          │
+          ▼
+socketio.emit(..., room="admins")
+          │
+          ▼
+Admins Room
+   │              │
+Admin 1       Admin 2
+
+I used a room instead of broadcasting because broadcasting would send the notification to every connected user, including customers. That would expose admin-only information and create unnecessary network traffic.
+
+Using a room provides:
+• Only admins receive notifications.
+• Better security.
+• Less network traffic.
+• Better scalability.
+
+3. When a user refreshes the page, the socket disconnects and reconnects. How do previously saved notifications still appear in the bell dropdown?
+
+When the page is refreshed, the current Socket.IO connection is disconnected.
+
+Refresh Page
+      │
+      ▼
+Socket Disconnects
+      │
+      ▼
+React Reloads
+      │
+      ▼
+Socket Reconnects
+
+If notifications were stored only in memory, they would disappear after the refresh.
+
+To avoid this, every notification is saved in the MySQL notifications table before being sent through Socket.IO.
+
+After React loads again, it sends an HTTP request to fetch all saved notifications.
+
+Flow:
+
+React App Starts
+        │
+        ▼
+GET /api/notifications
+        │
+        ▼
+Flask Server
+        │
+        ▼
+MySQL Notifications Table
+        │
+        ▼
+Notification List
+        │
+        ▼
+Bell Dropdown
+
+After loading previous notifications from the database, Socket.IO is used only for receiving new notifications in real time.
+
+Therefore:
+• Database stores all notifications permanently.
+• HTTP loads old notifications after refresh.
+• Socket.IO delivers new notifications instantly.
+4. What does socketio.emit() do versus emit() inside a @socketio.on() handler? What is the difference?
+Both functions send Socket.IO events, but they are used in different situations.
+socketio.emit()
+socketio.emit() can be called from anywhere in the Flask application, such as HTTP routes, background tasks, or scheduled jobs.
+Example:
+After a customer places an order, the order API saves the notification and uses socketio.emit() to send it to the "admins" room.
+This is how my project sends real-time order notifications
+
+emit()
+
+emit() is used only inside a Socket.IO event handler decorated with @socketio.on().
+
+Example:
+
+When a client sends a "join" event, the server handles it and replies using emit() to confirm the connection or room joining.
+Difference:
+socketio.emit()
+• Can be called anywhere in the Flask application.
+• Used in HTTP routes, background tasks, or scheduled jobs.
+• Can send messages to all clients or a specific room.
+emit()
+• Can only be used inside a @socketio.on() event handler.
+• Used while handling Socket.IO events.
+• Commonly used to reply to the connected client.
+
+In my project:
+• socketio.emit() is used in the order API to send new order notifications to the admin room.
+• emit() is used inside Socket.IO event handlers such as the join event to communicate with connected clients.
