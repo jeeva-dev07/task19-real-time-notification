@@ -1,0 +1,378 @@
+/* =========================
+   LIGHT THEME
+========================= */
+
+:root[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f5f7;
+
+  --text-primary: #1a1a2e;
+  --text-secondary: #555577;
+
+  --border-color: #e0e0e0;
+
+  --card-bg: #ffffff;
+  --navbar-bg: #ffffff;
+
+  --btn-primary: #6366f1;
+  --btn-text: #ffffff;
+
+  --code-bg: #f4f3ec;
+
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* =========================
+   DARK THEME
+========================= */
+
+:root[data-theme="dark"] {
+
+  --bg-primary: #0f0f1a;
+  --bg-secondary: #1a1a2e;
+
+  --text-primary: #e8e8f0;
+  --text-secondary: #9999bb;
+
+  --border-color: #2e2e4a;
+
+  --card-bg: #1a1a2e;
+  --navbar-bg: #12121f;
+
+  --btn-primary: #6366f1;
+  --btn-text: #ffffff;
+
+  --code-bg: #1f2028;
+
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+}
+
+
+/* =========================
+   GLOBAL RESET
+========================= */
+
+* {
+
+  margin: 0;
+  padding: 0;
+
+  box-sizing: border-box;
+
+}
+
+
+html,
+body {
+
+  width: 100%;
+  min-height: 100%;
+
+}
+
+
+body {
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  background: var(--bg-primary);
+
+  color: var(--text-primary);
+
+
+  transition:
+
+    background 0.3s ease,
+    color 0.3s ease;
+
+
+  color-scheme: light;
+
+}
+
+
+/* =========================
+   ROOT
+========================= */
+
+#root {
+
+  width: 1126px;
+
+  max-width: 100%;
+
+  min-height: 100vh;
+
+
+  margin: 0 auto;
+
+
+  display: flex;
+
+  flex-direction: column;
+
+
+  background: var(--bg-primary);
+
+  color: var(--text-primary);
+
+
+  transition:
+
+    background 0.3s ease,
+    color 0.3s ease;
+
+}
+
+
+
+/* =========================
+   TEXT
+========================= */
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+
+  color: var(--text-primary);
+
+}
+
+
+p {
+
+  color: var(--text-secondary);
+
+}
+
+
+
+/* =========================
+   LINKS
+========================= */
+
+
+a {
+
+  text-decoration: none;
+
+  color: inherit;
+
+}
+
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+
+button {
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  border: none;
+
+  outline: none;
+
+
+  transition: 0.3s ease;
+
+}
+
+
+
+.primary-btn {
+
+  background: var(--btn-primary);
+
+  color: var(--btn-text);
+
+}
+
+
+
+/* =========================
+   INPUTS
+========================= */
+
+
+input,
+select,
+textarea {
+
+
+  width: 100%;
+
+
+  font-family: inherit;
+
+
+  background: var(--card-bg);
+
+
+  color: var(--text-primary);
+
+
+  border: 1px solid var(--border-color);
+
+
+  outline: none;
+
+
+  transition: 0.3s ease;
+
+
+}
+
+
+
+input::placeholder,
+textarea::placeholder {
+
+  color: var(--text-secondary);
+
+}
+
+
+
+input:focus,
+select:focus,
+textarea:focus {
+
+
+  border-color: var(--btn-primary);
+
+
+}
+
+
+
+/* =========================
+   CARDS
+========================= */
+
+
+.card {
+
+
+  background: var(--card-bg);
+
+
+  border: 1px solid var(--border-color);
+
+
+  box-shadow: var(--shadow);
+
+
+  transition:
+
+    background 0.3s ease,
+    border 0.3s ease;
+
+
+}
+
+
+
+/* =========================
+   CODE
+========================= */
+
+
+code {
+
+
+  font-family:
+
+    ui-monospace,
+    Consolas,
+    monospace;
+
+
+  background: var(--code-bg);
+
+
+  color: var(--text-primary);
+
+
+  padding: 4px 8px;
+
+
+  border-radius: 4px;
+
+
+}
+
+
+
+/* =========================
+   IMAGES
+========================= */
+
+
+img {
+
+
+  max-width: 100%;
+
+
+  display: block;
+
+
+}
+
+
+
+/* =========================
+   SCROLLBAR
+========================= */
+
+
+::-webkit-scrollbar {
+
+  width: 8px;
+
+}
+
+
+::-webkit-scrollbar-thumb {
+
+
+  background: var(--border-color);
+
+
+  border-radius: 10px;
+
+
+}
+
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+
+@media(max-width:1024px){
+
+
+  #root{
+
+    width:100%;
+
+  }
+
+
+}
